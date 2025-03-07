@@ -1,0 +1,80 @@
+#pragma once
+
+#include "d3d_inc.h"
+#include <array>
+
+#include "d3d_buffer.h"
+#include "d3d_texture.h"
+#include "d3d_mesh.h"
+#include "d3d_material.h"
+#include "d3d_def_renderer.h"
+
+namespace base {
+  namespace graphics {
+
+    class d3d_renderer
+    {
+    public:
+      d3d_renderer(HWND hwnd);
+
+      void draw_quad(const d3d_material& material) const;
+      void draw_quad_instanced(const d3d_material& material, uint32_t count) const;
+
+      void draw(const d3d_material& material, const d3d_mesh& mesh) const;
+      void draw_instanced(const d3d_material& material, const d3d_mesh& mesh, uint32_t count) const;
+
+      const d3d_texture& get_render_target() const {
+        return _renderTexture;
+      }
+      void set_render_target(const d3d_texture& texture) {
+        _renderTexture = texture;
+      }
+      void clear_render_target(const std::array<float, 4>& color);
+
+      void play(const d3d_def_renderer& renderer) const;
+
+      void present(bool vSync = false) const;
+
+      void map_buffer(const d3d_buffer& buffer, D3D11_MAPPED_SUBRESOURCE& map_out) const;
+      void map_texture(const d3d_texture& texture, D3D11_MAPPED_SUBRESOURCE& map_out) const;
+
+      void unmap_buffer(const d3d_buffer& buffer) const;
+      void unmap_texture(const d3d_texture& texture) const;
+
+      void update_texture(const d3d_texture& texture, const char* pData, uint32_t subIndex) const;
+      void update_buffer(const d3d_buffer& buffer, const char* pData) const;
+
+      d3d_texture create_texture(uint32_t width, uint32_t height, const char* const* ppPixels,
+        DXGI_FORMAT format, bool generateMips, access_mode access, texture_type type,
+        uint32_t count, sampler_mode sampler) const;
+
+      d3d_buffer create_buffer(
+        const char* pData, uint32_t length, buffer_type type,uint32_t count, access_mode access) const;
+      d3d_shader create_shader(const char* pBytes, size_t length) const;
+
+      d3d_def_renderer create_def_renderer() const;
+
+      void imgui_new_frame() const;
+      void imgui_draw() const;
+      bool imgui_forward_msg(MSG& msg);
+
+    private:
+      void clear_state() const;
+
+    private:
+      Microsoft::WRL::ComPtr<IDXGISwapChain> _pSwapchain;
+      Microsoft::WRL::ComPtr<ID3D11Device> _pDevice;
+      Microsoft::WRL::ComPtr<ID3D11DeviceContext> _pContext;
+      Microsoft::WRL::ComPtr<ID3D11Texture2D> _pBackBuffer;
+      D3D11_VIEWPORT _viewport = { 0 };
+
+      d3d_texture _renderTexture;
+
+      d3d_sampler_col _samplers;
+      d3d_blend_col _blends;
+
+      d3d_mesh _quad;
+    };
+  }
+}
+
