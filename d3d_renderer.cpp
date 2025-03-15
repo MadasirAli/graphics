@@ -66,6 +66,20 @@ void d3d_renderer::present(bool vSync) const
   );
 }
 
+void d3d_renderer::resize(uint32_t width, uint32_t height) {
+  _pBackBuffer.Reset();
+
+  D3D_CALL(
+    _pSwapchain->ResizeBuffers(_bufferCount, width, height, outputFormat, _swapchainFlags);
+  );
+  D3D_CALL(
+    _pSwapchain->GetBuffer(0, IID_PPV_ARGS(_pBackBuffer.GetAddressOf()))
+  );
+
+  _renderTexture = create_texture(width, height, nullptr,
+    outputFormat, false, access_mode::none, texture_type::render, 1, sampler_mode::point);
+}
+
 void d3d_renderer::map_buffer(const d3d_buffer& buffer, D3D11_MAPPED_SUBRESOURCE& map_out) const
 {
   assert(buffer.get_type() != buffer_type::undef);
@@ -218,7 +232,6 @@ d3d_renderer::d3d_renderer(HWND hwnd)
 
   const D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
   D3D_FEATURE_LEVEL myFeatureLevel;
-  DXGI_FORMAT backBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 
   RECT rect = { 0 };
   if (GetClientRect(hwnd, &rect) == false) {
@@ -232,13 +245,14 @@ d3d_renderer::d3d_renderer(HWND hwnd)
   swapDesc.OutputWindow = hwnd;
   swapDesc.SampleDesc.Count = 1;
   swapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-  swapDesc.BufferCount = 2;
+  swapDesc.BufferCount = _bufferCount;
   swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
   swapDesc.BufferDesc.Width = width;
   swapDesc.BufferDesc.Height = height;
   swapDesc.BufferDesc.RefreshRate.Numerator = 60;
   swapDesc.BufferDesc.RefreshRate.Denominator = 1;
-  swapDesc.BufferDesc.Format = backBufferFormat;
+  swapDesc.BufferDesc.Format = outputFormat;
+  swapDesc.Flags = _swapchainFlags;
 
   auto result = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE,
     nullptr, flags, &featureLevel, 1u, D3D11_SDK_VERSION, &swapDesc, _pSwapchain.GetAddressOf(),
@@ -260,7 +274,7 @@ d3d_renderer::d3d_renderer(HWND hwnd)
   _viewport.Height = (float)height;
 
   _renderTexture = create_texture(width, height, nullptr,
-    backBufferFormat, false, access_mode::none, texture_type::render, 1, sampler_mode::point);
+    outputFormat, false, access_mode::none, texture_type::render, 1, sampler_mode::point);
 
   clear_state();
 

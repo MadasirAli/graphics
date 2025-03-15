@@ -29,11 +29,13 @@ namespace base {
       void set_render_target(const d3d_texture& texture) {
         _renderTexture = texture;
       }
-      void clear_render_target(const std::array<float, 4>& color);
+
+      void resize(uint32_t width, uint32_t height);
 
       void play(const d3d_def_renderer& renderer) const;
 
       void present(bool vSync = false) const;
+      void clear_render_target(const std::array<float, 4>& color);
 
       void map_buffer(const d3d_buffer& buffer, D3D11_MAPPED_SUBRESOURCE& map_out) const;
       void map_texture(const d3d_texture& texture, D3D11_MAPPED_SUBRESOURCE& map_out) const;
@@ -74,6 +76,11 @@ namespace base {
       d3d_blend_col _blends;
 
       d3d_mesh _quad;
+
+      static constexpr const uint32_t _bufferCount = 2;
+      static constexpr const uint32_t _swapchainFlags = 0;
+    public:
+      static constexpr const DXGI_FORMAT outputFormat = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
     };
   }
 }
