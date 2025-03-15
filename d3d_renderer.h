@@ -17,7 +17,7 @@ namespace base {
     public:
       d3d_renderer(HWND hwnd);
       d3d_renderer(const d3d_renderer&) = delete;
-      d3d_rednerer& operator=(const d3d_renderer&) = delete;
+      d3d_renderer& operator=(const d3d_renderer&) = delete;
 
       void draw_quad(const d3d_material& material) const;
       void draw_quad_instanced(const d3d_material& material, uint32_t count) const;
