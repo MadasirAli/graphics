@@ -78,6 +78,19 @@ void d3d_renderer::resize(uint32_t width, uint32_t height) {
 
   _renderTexture = create_texture(width, height, nullptr,
     outputFormat, false, access_mode::none, texture_type::render, 1, sampler_mode::point);
+
+  _viewport.Width = (float)width;
+  _viewport.Height = (float)height;
+}
+
+void d3d_renderer::set_render_texture(const d3d_texture& renderTexture) {
+  _renderTexture = renderTexture;
+
+  _viewport.Width = (float)renderTexture.get_width();
+  _viewport.Height = (float)renderTexture.get_height();
+}
+const d3d_texture& d3d_renderer::get_render_texture() const {
+  return _renderTexture;
 }
 
 void d3d_renderer::map_buffer(const d3d_buffer& buffer, D3D11_MAPPED_SUBRESOURCE& map_out) const

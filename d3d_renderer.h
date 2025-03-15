@@ -16,6 +16,8 @@ namespace base {
     {
     public:
       d3d_renderer(HWND hwnd);
+      d3d_renderer(const d3d_renderer&) = delete;
+      d3d_rednerer& operator=(const d3d_renderer&) = delete;
 
       void draw_quad(const d3d_material& material) const;
       void draw_quad_instanced(const d3d_material& material, uint32_t count) const;
@@ -45,6 +47,9 @@ namespace base {
 
       void update_texture(const d3d_texture& texture, const char* pData, uint32_t subIndex) const;
       void update_buffer(const d3d_buffer& buffer, const char* pData) const;
+
+      void set_render_texture(const d3d_texture& renderTexture);
+      const d3d_texture& get_render_texture() const;
 
       d3d_texture create_texture(uint32_t width, uint32_t height, const char* const* ppPixels,
         DXGI_FORMAT format, bool generateMips, access_mode access, texture_type type,
