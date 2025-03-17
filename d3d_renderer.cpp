@@ -114,6 +114,7 @@ void d3d_renderer::map_buffer(const d3d_buffer& buffer, D3D11_MAPPED_SUBRESOURCE
     assert(false);
   }
 
+  map_out.pData = nullptr;
   D3D_CALL(
     _pContext->Map(buffer.get_ptr(), 0, map, 0, &map_out)
   );

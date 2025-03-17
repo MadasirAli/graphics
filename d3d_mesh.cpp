@@ -54,10 +54,10 @@ const d3d_mesh d3d_mesh::quad(ID3D11Device* pDevice)
 {
   vertex quadVertices[4] = {
     // Position, UV
-    { { -1.0f, -1.0f }, { 0.0f, 0.0f } }, // Bottom-left
-    { {  1.0f, -1.0f }, { 1.0f, 0.0f } }, // Bottom-right
-    { { -1.0f,  1.0f }, { 0.0f, 1.0f } }, // Top-left
-    { {  1.0f,  1.0f }, { 1.0f, 1.0f } }  // Top-right
+    { { -1.0f, -1.0f }, { 0.0f, 1.0f } }, // Bottom-left (UV Y inverted)
+    { {  1.0f, -1.0f }, { 1.0f, 1.0f } }, // Bottom-right (UV Y inverted)
+    { { -1.0f,  1.0f }, { 0.0f, 0.0f } }, // Top-left (UV Y inverted)
+    { {  1.0f,  1.0f }, { 1.0f, 0.0f } }  // Top-right (UV Y inverted)
   };
 
   index quadIndices[6] = {

@@ -41,6 +41,7 @@ namespace base {
       d3d_material(const d3d_shader& shader) :
         _shader(shader)
       {}
+      d3d_material() {}
 
       void bind(ID3D11DeviceContext* pContext, const d3d_sampler_col& samplers,
         const d3d_blend_col& blendStates) const;

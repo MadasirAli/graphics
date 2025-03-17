@@ -26,6 +26,7 @@ namespace base {
       };
     public:
       d3d_shader(const char* bytes, size_t length, ID3D11Device* pDevice);
+      d3d_shader() {}
 
       ID3D11VertexShader* get_vertex() const {
         return _pVertexShader.Get();
