@@ -121,56 +121,68 @@ void d3d_renderer::map_buffer(const d3d_buffer& buffer, D3D11_MAPPED_SUBRESOURCE
   assert(map_out.pData != nullptr);
 }
 
-
-void d3d_renderer::map_texture(const d3d_texture& texture, D3D11_MAPPED_SUBRESOURCE& map_out) const
-{
-  D3D11_MAP map = (D3D11_MAP)0;
-  if (texture.get_read_write() == access_mode::write_discard) {
-    map = D3D11_MAP_WRITE_DISCARD;
-  }
-  else if (texture.get_read_write() == access_mode::read) {
-    map = D3D11_MAP_READ;
-  }
-  else if (texture.get_read_write() == access_mode::write) {
-    map = D3D11_MAP_WRITE;
-  }
-  else if (texture.get_read_write() == access_mode::read_write) {
-    map = (D3D11_MAP)(D3D11_MAP_WRITE | D3D11_MAP_READ);
-  }
-  else {
-    assert(false);
-  }
-
-  D3D_CALL(
-    _pContext->Map(texture.get_ptr(), 0, map, 0, &map_out)
-  );
-
-  assert(map_out.pData != nullptr);
-}
+/* Currently not in use */
+//void d3d_renderer::map_texture(const d3d_texture& texture, D3D11_MAPPED_SUBRESOURCE& map_out) const
+//{
+//  D3D11_MAP map = (D3D11_MAP)0;
+//  if (texture.get_read_write() == access_mode::write_discard) {
+//    map = D3D11_MAP_WRITE_DISCARD;
+//  }
+//  else if (texture.get_read_write() == access_mode::read) {
+//    map = D3D11_MAP_READ;
+//  }
+//  else if (texture.get_read_write() == access_mode::write) {
+//    map = D3D11_MAP_WRITE;
+//  }
+//  else if (texture.get_read_write() == access_mode::read_write) {
+//    map = (D3D11_MAP)(D3D11_MAP_WRITE | D3D11_MAP_READ);
+//  }
+//  else {
+//    assert(false);
+//  }
+//
+//  D3D_CALL(
+//    _pContext->Map(texture.get_ptr(), 0, map, 0, &map_out)
+//  );
+//
+//  assert(map_out.pData != nullptr);
+//}
 
 void d3d_renderer::unmap_buffer(const d3d_buffer& buffer) const
 {
   _pContext->Unmap(buffer.get_ptr(), 0);
 }
-void d3d_renderer::unmap_texture(const d3d_texture& texture) const
-{
-  _pContext->Unmap(texture.get_ptr(), 0);
-}
+/* Currently not in use */
+//void d3d_renderer::unmap_texture(const d3d_texture& texture) const
+//{
+//  _pContext->Unmap(texture.get_ptr(), 0);
+//}
 
-void d3d_renderer::update_texture(const d3d_texture& texture, const char* pData, uint32_t subIndex) const
-{
-  D3D_CHECK_CALL(
-  _pContext->UpdateSubresource(texture.get_ptr(), subIndex, nullptr,
-    pData, texture.get_width() * texture.get_pixel_size(),
-    texture.get_width() * texture.get_height() * texture.get_pixel_size())
-  );
-}
+/* Currently not in use */
+//void d3d_renderer::update_texture(const d3d_texture& texture, const char* pData, uint32_t subIndex) const
+//{
+//  D3D_CHECK_CALL(
+//  _pContext->UpdateSubresource(texture.get_ptr(), subIndex, nullptr,
+//    pData, texture.get_width() * texture.get_pixel_size(),
+//    texture.get_width() * texture.get_height() * texture.get_pixel_size())
+//  );
+//}
 
 void d3d_renderer::update_buffer(const d3d_buffer& buffer, const char* pData) const
 {
   D3D_CHECK_CALL(
     _pContext->UpdateSubresource(buffer.get_ptr(), 0, nullptr,pData, 0, 0)
   );
+}
+
+void d3d_renderer::copy_buffer_region(const d3d_buffer& source, const d3d_buffer destination,
+  uint32_t srcX, uint32_t srcY, uint32_t dstX, uint32_t dstY, uint32_t width, uint32_t height) const {
+  D3D11_BOX srcBox = { 0 };
+  srcBox.left = srcX;
+  srcBox.top = srcY;
+  srcBox.right = srcBox.left + width;
+  srcBox.bottom = srcBox.top + height;
+  _pContext->CopySubresourceRegion(destination.get_ptr(), 0, dstX, dstY, 0, source.get_ptr(), 0, &srcBox);
 }
 
 d3d_texture d3d_renderer::create_texture(uint32_t width, uint32_t height, const char* const* ppPixels, DXGI_FORMAT format, bool generateMips, access_mode access, texture_type type, uint32_t count, sampler_mode sampler) const

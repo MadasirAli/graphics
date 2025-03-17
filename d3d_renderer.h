@@ -25,12 +25,13 @@ namespace base {
       void draw(const d3d_material& material, const d3d_mesh& mesh) const;
       void draw_instanced(const d3d_material& material, const d3d_mesh& mesh, uint32_t count) const;
 
-      const d3d_texture& get_render_target() const {
-        return _renderTexture;
-      }
-      void set_render_target(const d3d_texture& texture) {
-        _renderTexture = texture;
-      }
+      /* Currently not in use */
+      //const d3d_texture& get_render_target() const {
+      //  return _renderTexture;
+      //}
+      //void set_render_target(const d3d_texture& texture) {
+      //  _renderTexture = texture;
+      //}
 
       void resize(uint32_t width, uint32_t height);
 
@@ -40,13 +41,19 @@ namespace base {
       void clear_render_target(const std::array<float, 4>& color);
 
       void map_buffer(const d3d_buffer& buffer, D3D11_MAPPED_SUBRESOURCE& map_out) const;
-      void map_texture(const d3d_texture& texture, D3D11_MAPPED_SUBRESOURCE& map_out) const;
+      /* Currently not in use */
+      //void map_texture(const d3d_texture& texture, D3D11_MAPPED_SUBRESOURCE& map_out) const;
 
       void unmap_buffer(const d3d_buffer& buffer) const;
-      void unmap_texture(const d3d_texture& texture) const;
+      /* Currently not in use */
+      //void unmap_texture(const d3d_texture& texture) const;
 
-      void update_texture(const d3d_texture& texture, const char* pData, uint32_t subIndex) const;
+      /* Currently not in use */
+      //void update_texture(const d3d_texture& texture, const char* pData, uint32_t subIndex) const;
       void update_buffer(const d3d_buffer& buffer, const char* pData) const;
+
+      void copy_buffer_region(const d3d_buffer& source, const d3d_buffer destination,
+        uint32_t srcX, uint32_t srcY, uint32_t dstX, uint32_t dstY, uint32_t width, uint32_t height) const;
 
       void set_render_texture(const d3d_texture& renderTexture);
       const d3d_texture& get_render_texture() const;
