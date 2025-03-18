@@ -158,6 +158,9 @@
     <ClInclude Include="access_mode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="imgui_inc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
