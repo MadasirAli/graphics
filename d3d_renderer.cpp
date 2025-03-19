@@ -120,6 +120,9 @@ void d3d_renderer::map_buffer(const d3d_buffer& buffer, D3D11_MAPPED_SUBRESOURCE
   );
 
   assert(map_out.pData != nullptr);
+  if (map_out.pData == nullptr) {
+    THROW_GERROR("Failed to map buffer.");
+  }
 }
 
 /* Currently not in use */
