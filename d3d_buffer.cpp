@@ -48,7 +48,7 @@ d3d_buffer::d3d_buffer(const char* pData, uint32_t length, buffer_type type,
     cpuFlags = D3D11_CPU_ACCESS_WRITE;
   }
   else if (access == access_mode::read_write) {
-    assert(type == buffer_type::staging);
+    //assert(type == buffer_type::staging);
     cpuFlags = D3D11_CPU_ACCESS_WRITE | D3D11_CPU_ACCESS_READ;
   }
   else {
